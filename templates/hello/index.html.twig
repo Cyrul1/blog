@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div>
+    <b>wiadomość główna</b>
+    <br>
+<div>
+    {% if messages|length > 0 %}
+    {% for key,message in messages|slice(0, limit) %}
+        <a href="{{ path('app_show_one', { id: key }) }}"> {{ message.message }}</a>
+   {{ include('hello/_messagedate.html.twig', {message: message})}}
+    {% endfor %}
+    {% else %}
+    Tutaj nie ma nic
+    {% endif %}
+</div>
+
+
+</div>
+{% endblock %}
+{% block title %}Strona główna{% endblock %}

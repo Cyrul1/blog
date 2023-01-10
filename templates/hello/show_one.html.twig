@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div>wiadomość brzmi</div> 
+<div>
+    <b>{{ message.message }}</b>
+     {{ include('hello/_messagedate.html.twig', {message: message})}}
+</div>
+{% endblock %}
+
+{% block title %}Strona z wiadomościami{% endblock %}
