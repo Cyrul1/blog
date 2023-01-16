@@ -3,19 +3,16 @@
 {% block title %}All posts!{% endblock %}
 
 {% block body %}
-<div>
-    <b>wiadomość główna</b>
-    <br>
-<div>
-    {% if posts|length > 0 %}
-    {% for post in posts %}
-        <br><a href="{{ path('app_social_show', { post: post.id }) }}"> {{ post.title }}</a></br>
-   
-    {% endfor %}
-    {% else %}
-    Tutaj nie ma nic
-    {% endif %}
-</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+    
+        {% if posts|length > 0 %}
+        {% for post in posts %}
+        {{ include('social/post.html.twig', { post: post }) }}
+        {% endfor %}
+        {% else %}
+        Tutaj nie ma nic
+        {% endif %}
+    
 
 
 </div>

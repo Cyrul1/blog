@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Stwórz nowy post!{% endblock %}
+    {% block bread %}
+     → Dodawanie posta
+    {% endblock %}
+
 
 {% block body %}
     {{ include('social/_form.html.twig') }}

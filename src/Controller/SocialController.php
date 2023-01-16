@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
-use Doctrine\Bundle\DoctrineBundle\DoctrineBundle\ServiceEntityRepository;
 use DateTime;
 use App\Entity\MicroPost;
+use App\Form\MicroPostType;
 use App\Repository\MicroPostRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle\ServiceEntityRepository;
 
 class SocialController extends AbstractController
 {
@@ -32,12 +33,8 @@ class SocialController extends AbstractController
     #[Route('/social/add', name: 'app_social_add', priority:2 )]
     public function add(Request $request, MicroPostRepository $posts): Response
     {
-        $micropost = new MicroPost();
-        $form = $this->createFormBuilder($micropost)
-        ->add('title')
-        ->add('text')
-        //->add('submit', SubmitType::class, ['label' => 'save'])
-        ->getForm();
+        
+        $form = $this->createForm(MicroPostType::class, new MicroPost());
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -62,11 +59,8 @@ class SocialController extends AbstractController
     public function edit(MicroPost $post, Request $request, MicroPostRepository $posts): Response
     {
         
-        $form = $this->createFormBuilder($post)
-        ->add('title')
-        ->add('text')
-        //->add('submit', SubmitType::class, ['label' => 'save'])
-        ->getForm();
+        $form = $this->createForm(MicroPostType::class, $post);
+        
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
