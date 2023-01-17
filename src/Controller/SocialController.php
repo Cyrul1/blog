@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\Comment;
 use App\Entity\MicroPost;
+use App\Form\CommentType;
 use App\Form\MicroPostType;
+use App\Repository\CommentRepository;
 use App\Repository\MicroPostRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +23,7 @@ class SocialController extends AbstractController
     {
 
         return $this->render('social/indexx.html.twig', [
-            'posts' => $posts->findAll(),
+            'posts' => $posts->findAllWithComments(),
         ]);
     }
     #[Route('/social/{post}', name: 'app_social_show')]
@@ -76,10 +79,41 @@ class SocialController extends AbstractController
         return $this->renderForm(
             'social/edit.html.twig',
             [
-                'form' => $form
+                'form' => $form,
+                'post' => $post
             ]
             );  
     }
+
+    #[Route('/social/{post}/comment', name: 'app_social_comment')]
+    public function addComment(MicroPost $post, Request $request, CommentRepository $comments): Response
+    {
+        
+        $form = $this->createForm(CommentType::class, new Comment());
+        
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $comment = $form->getData();
+            $comment->setPost($post);
+            $comments->save($comment, true);
+
+            $this->addFlash('success', 'Twój komentarz został zaktualizownay!');
+            
+            return $this-> redirectToRoute('app_social_show',
+         ['post' => $post->getId()]
+        ); 
+        }
+
+        return $this->renderForm(
+            'social/comment.html.twig',
+            [
+                'form' => $form,
+                'post' => $post
+            ]
+            );  
+    }
+
 
 }
 ?>

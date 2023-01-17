@@ -3,7 +3,7 @@
 {% block title %}Edytuj post!{% endblock %}
 
     {% block bread %}
-     → Edytowanie posta
+    → <a href="{{ path('app_social_show', { post: post.id }) }}">Post</a> → Edytuj
     {% endblock %}
 
 {% block body %}
