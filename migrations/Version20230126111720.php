@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230124123545 extends AbstractMigration
+final class Version20230126111720 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,10 +20,7 @@ final class Version20230124123545 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE comment ADD author_id INT NOT NULL');
-        $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526CF675F31B FOREIGN KEY (author_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_9474526CF675F31B ON comment (author_id)');
-        $this->addSql('ALTER TABLE micro_post ADD author_id INT NOT NULL');
+        $this->addSql('ALTER TABLE comment ADD created DATETIME NOT NULL');
         $this->addSql('ALTER TABLE micro_post ADD CONSTRAINT FK_2AEFE017F675F31B FOREIGN KEY (author_id) REFERENCES user (id)');
         $this->addSql('CREATE INDEX IDX_2AEFE017F675F31B ON micro_post (author_id)');
     }
@@ -31,11 +28,8 @@ final class Version20230124123545 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE comment DROP FOREIGN KEY FK_9474526CF675F31B');
-        $this->addSql('DROP INDEX IDX_9474526CF675F31B ON comment');
-        $this->addSql('ALTER TABLE comment DROP author_id');
+        $this->addSql('ALTER TABLE comment DROP created');
         $this->addSql('ALTER TABLE micro_post DROP FOREIGN KEY FK_2AEFE017F675F31B');
         $this->addSql('DROP INDEX IDX_2AEFE017F675F31B ON micro_post');
-        $this->addSql('ALTER TABLE micro_post DROP author_id');
     }
 }

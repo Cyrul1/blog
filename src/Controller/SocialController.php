@@ -15,6 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle\ServiceEntityRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 class SocialController extends AbstractController
 {
@@ -27,6 +29,7 @@ class SocialController extends AbstractController
         ]);
     }
     #[Route('/social/{post}', name: 'app_social_show')]
+    #[IsGranted(MicroPost::VIEW, 'post')]
     public function showOne(MicroPost $post): Response
     {
         return $this->render('social/show.html.twig', [
@@ -34,6 +37,7 @@ class SocialController extends AbstractController
         ]);
     }
     #[Route('/social/add', name: 'app_social_add', priority:2 )]
+    #[IsGranted('ROLE_VERIFIED')]
     public function add(Request $request, MicroPostRepository $posts): Response
     {
         
@@ -42,7 +46,7 @@ class SocialController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $post = $form->getData();
-            $post->setCreated(new DateTime());
+            $post->setAuthor($this->getUser());
             $posts->save($post, true);
 
             $this->addFlash('success', 'Twój post został dodany!');
@@ -59,6 +63,7 @@ class SocialController extends AbstractController
     }
 
     #[Route('/social/{post}/edit', name: 'app_social_edit')]
+    #[IsGranted(MicroPost::EDIT, 'post')]
     public function edit(MicroPost $post, Request $request, MicroPostRepository $posts): Response
     {
         
@@ -86,6 +91,7 @@ class SocialController extends AbstractController
     }
 
     #[Route('/social/{post}/comment', name: 'app_social_comment')]
+    #[IsGranted('ROLE_COMMENTER')]
     public function addComment(MicroPost $post, Request $request, CommentRepository $comments): Response
     {
         
@@ -96,6 +102,7 @@ class SocialController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $comment = $form->getData();
             $comment->setPost($post);
+            $comment->setAuthor($this->getUser());
             $comments->save($comment, true);
 
             $this->addFlash('success', 'Twój komentarz został zaktualizownay!');

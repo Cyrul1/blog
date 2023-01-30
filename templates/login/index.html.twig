@@ -3,7 +3,7 @@
 
 
     {% block bread %}
-     → Login
+     → Logowanie
     {% endblock %}
 
 {% block body %}
@@ -27,9 +27,9 @@
    <div>
     <button type="submit" 
     class="block w-full shadow-sm border-transparent bg-indigo-600 hover:bg-indigo-700 dark: bg-indigo-500 dark:hover:bg-indigo-400 text-white rounded-mb border p-2 mt-1 mb-1 ">Login!</button>
-    </div>
-    
-
-
+    </div>    
 </form>
+    <div class="mt-2 text-center text-sm text-gray-500 dark:text-gray-300">
+     Nie masz jeszcze konta? <a href="{{path('app_register')}}" class="font-medium text-gray-700 dark:text-gray-100">Zarejestruj się tutaj!</a>
+    </div>
 {% endblock %}
