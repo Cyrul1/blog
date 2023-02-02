@@ -28,19 +28,22 @@
             {% endblock %}
         </div>
         <div class="text-right">
-            <div class="text-sm text-gray-400 dark:text-gray-500"> 
+            <div class=" text-sm text-gray-400 dark:text-gray-300 flex"> 
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <div>
                     <a href="{{ path('app_social_add') }}">Stwórz nowy Post!</a>
                 </div>
-                 <div>
+                <div class="ml-2">
+                    <a href="{{ path('app_user_settings') }}">Ustawienia Profilu!</a>
+                </div>
+                 <div class="ml-2">
                 <a href="{{ path('app_logout') }}"> Wyloguj się!</a>
                 </div>
             {% else %}
                 <div>
                 <a href="{{ path('app_login') }}"> Zaloguj się tutaj!</a>
                 </div>
-                <div>
+                <div class="ml-2">
                 <a href="{{ path('app_register') }}"> Zarejestruj się tutaj!</a>
                 </div>
             {% endif %}
