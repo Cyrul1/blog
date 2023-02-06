@@ -16,4 +16,21 @@ class ProflieController extends AbstractController
             'user'=> $user
         ]);
     }
+
+    #[Route('/proflie/{id}/follows', name: 'app_proflie_follows')]
+    public function follows(User $user): Response
+    {
+        return $this->render('follow/_follows.html.twig', [
+            'user'=> $user
+        ]);
+    }
+
+    #[Route('/proflie/{id}/followers', name: 'app_proflie_followers')]
+    public function followers(User $user): Response
+    {
+        return $this->render('follow/_followers.html.twig', [
+            'user'=> $user
+        ]);
+    }
+
 }

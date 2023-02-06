@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil Użytkownika!{% endblock %}
+{% block title %}Profil Użytkownika → Obserwujący!{% endblock %}
 
     {% block bread %}
-     → Profil Użytkownika
+     → Profil Użytkownika → Obserwujący
     {% endblock %}
 {% block body %}
         {{ include('proflie/_profile_header.html.twig')}}
         {{ include('proflie/_profile_tabs.html.twig')}}
-        {{ include('social/_post_list.html.twig', { posts: user.posts}) }}
+        {{ include('follow/_follower_list.html.twig', {users: user.followers})}}    
 {% endblock %}
