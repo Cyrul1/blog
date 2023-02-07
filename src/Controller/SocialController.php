@@ -28,6 +28,25 @@ class SocialController extends AbstractController
             'posts' => $posts->findAllWithComments(),
         ]);
     }
+
+    #[Route('/social/topLiked', name: 'app_social_topLiked')]
+    public function topLiked(MicroPostRepository $posts): Response
+    {
+
+        return $this->render('social/top_liked.html.twig', [
+            'posts' => $posts->findAllWithComments(),
+        ]);
+    }
+    
+    #[Route('/social/follows', name: 'app_social_follows')]
+    public function follows(MicroPostRepository $posts): Response
+    {
+
+        return $this->render('social/follows.html.twig', [
+            'posts' => $posts->findAllWithComments(),
+        ]);
+    }    
+
     #[Route('/social/{post}', name: 'app_social_show')]
     #[IsGranted(MicroPost::VIEW, 'post')]
     public function showOne(MicroPost $post): Response

@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\MicroPost;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<MicroPost>
@@ -41,14 +43,60 @@ class MicroPostRepository extends ServiceEntityRepository
 
     public function findAllWithComments(): array
     {
-        return $this->createQueryBuilder('p')
-        -> addSelect('c')
-        ->leftJoin('p.comments', 'c')
-        ->orderBy('p.created', 'DESC')
-        ->getQuery()
-        ->getResult();
+        return $this-> findAllQuery(
+            withComments: true
+        )->getQuery()->getResult();
+
+    }
+
+    public function findAllByAuthor(
+        int | User $author
+    ): array
+    {
+        return $this-> findAllQuery(
+            withLikes: true,
+            withAuthors: true,
+            withComments: true,
+            withProfiles: true
+        )->where('p.author = :author')
+            ->setParameter(
+                'author',
+                $author instanceof User ? $author->getId() : $author
+            )->getQuery()->getResult();
+    
+    }
 
 
+    private function findAllQuery(
+        bool $withComments = false,
+        bool $withLikes = false,
+        bool $withAuthors = false,
+        bool $withProfiles = false,
+    ): QueryBuilder
+    {
+        $query = $this->createQueryBuilder('p');
+
+        if($withComments){
+            $query->leftJoin('p.comments', 'c')
+                ->addSelect('c');
+        }
+        
+        if($withLikes){
+            $query->leftJoin('p.likedBy', 'l')
+                ->addSelect('l');
+        }
+    
+        if($withAuthors || $withProfiles){
+            $query->leftJoin('p.author', 'a')
+                ->addSelect('a');
+        }
+
+        if($withProfiles){
+            $query->leftJoin('a.userProfile', 'up')
+                ->addSelect('up');
+        }
+
+        return $query->orderBy('p.created', 'DESC');
     }
 
 //    /**
