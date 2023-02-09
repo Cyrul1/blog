@@ -7,6 +7,8 @@ use App\Entity\MicroPost;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query;
 
 /**
  * @extends ServiceEntityRepository<MicroPost>
@@ -66,6 +68,46 @@ class MicroPostRepository extends ServiceEntityRepository
     
     }
 
+    public function findAllByAuthors(
+        Collection|array $authors
+    ): array
+    {
+        return $this-> findAllQuery(
+            withLikes: true,
+            withAuthors: true,
+            withComments: true,
+            withProfiles: true
+        )->where('p.author IN (:authors)')
+            ->setParameter(
+                'authors',
+                $authors
+            )->getQuery()->getResult();
+    
+    }
+
+   public function findAllWithMinLikes(
+        int $minLikes
+    ): array
+    {
+        $idList = $this-> findAllQuery(
+            withLikes: true
+        )->select('p.id')
+            ->groupBy('p.id')
+            ->having('COUNT(l) >= :minLikes')
+            ->setParameter('minLikes', $minLikes)
+            ->getQuery()
+            ->getResult(Query::HYDRATE_SCALAR_COLUMN);
+
+        return $this-> findAllQuery(
+            withLikes: true,
+            withAuthors: true,
+            withComments: true,
+            withProfiles: true
+        )->where('p.id in (:idList)')
+            ->setParameter('idList', $idList)
+            ->getQuery()
+            ->getResult();
+    }
 
     private function findAllQuery(
         bool $withComments = false,

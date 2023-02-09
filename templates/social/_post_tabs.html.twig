@@ -1,0 +1,33 @@
+
+    {% embed 'shared/_tabs.html.twig' %}
+        {% block tabs %}
+            {% embed 'shared/_tab.html.twig' with {route: 'app_social'} %}
+                {% block content %}
+                    Wszystkie Posty
+                {% endblock %}
+                {% block path %}
+                    {{ path('app_social')}}
+                {% endblock %}
+            {% endembed %}
+
+            {% embed 'shared/_tab.html.twig' with {route: 'app_social_topLiked', classes:'ml-5'} %}
+                {% block content %}
+                    Najbardziej lubiane posty
+                {% endblock %}
+                {% block path %}
+                    {{ path('app_social_topLiked')}}
+                {% endblock %}
+            {% endembed %} 
+
+            {% embed 'shared/_tab.html.twig' with {route: 'app_social_follows', classes:'ml-5'} %}
+                {% block content %}
+                    Obesrwowane
+                {% endblock %}
+                {% block path %}
+                    {{ path('app_social_follows')}}
+                {% endblock %}
+            {% endembed %}         
+       
+        {% endblock %}
+    {% endembed %}
+        <div class="mb-12"></div>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\MicroPostRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,10 +11,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProflieController extends AbstractController
 {
     #[Route('/proflie/{id}', name: 'app_proflie')]
-    public function show(User $user): Response
+    public function show(
+        User $user,
+        MicroPostRepository $posts
+        ): Response
     {
         return $this->render('proflie/showProfile.html.twig', [
-            'user'=> $user
+            'user'=> $user,
+            'posts'=>$posts->findAllByAuthor(
+                $user
+            )
         ]);
     }
 

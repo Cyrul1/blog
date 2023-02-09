@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}All posts!{% endblock %}
+{% block title %}Posty obserwowanych!{% endblock %}
+
+{% block bread %}
+→ Posty obserwowanych
+{% endblock %}
 
 {% block body %}
 {{ include('social/_post_tabs.html.twig') }}

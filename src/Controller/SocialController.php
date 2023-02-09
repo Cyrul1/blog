@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\User;
 use App\Entity\Comment;
 use App\Entity\MicroPost;
 use App\Form\CommentType;
@@ -13,9 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle\ServiceEntityRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 class SocialController extends AbstractController
@@ -34,16 +35,22 @@ class SocialController extends AbstractController
     {
 
         return $this->render('social/top_liked.html.twig', [
-            'posts' => $posts->findAllWithComments(),
+            'posts' => $posts->findAllWithMinLikes(1),
         ]);
     }
     
     #[Route('/social/follows', name: 'app_social_follows')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function follows(MicroPostRepository $posts): Response
     {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
 
-        return $this->render('social/follows.html.twig', [
-            'posts' => $posts->findAllWithComments(),
+        return $this->render('social/follows.html.twig', 
+        [
+            'posts' => $posts->findAllByAuthors(
+                $currentUser->getFollows()
+            ),
         ]);
     }    
 
