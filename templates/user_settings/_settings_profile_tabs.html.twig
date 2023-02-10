@@ -1,0 +1,23 @@
+
+    {% embed 'shared/_tabs.html.twig' %}
+        {% block tabs %}
+            {% embed 'shared/_tab.html.twig' with {route: 'app_user_settings'} %}
+                {% block content %}
+                    Ustawienia profilu
+                {% endblock %}
+                {% block path %}
+                    {{ path('app_user_settings')}}
+                {% endblock %}
+            {% endembed %}
+
+            {% embed 'shared/_tab.html.twig' with {route: 'app_user_settings_img', classes:'ml-5'} %}
+                {% block content %}
+                    Zdjęcie Profilu
+                {% endblock %}
+                {% block path %}
+                    {{ path('app_user_settings_img')}}
+                {% endblock %}
+            {% endembed %} 
+        {% endblock %}    
+    {% endembed %}
+        <div class="mb-12"></div>

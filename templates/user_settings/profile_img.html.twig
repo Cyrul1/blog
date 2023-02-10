@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zdjęcie Profilu!{% endblock %}
+    {% block bread %}
+     → Zdjęcie Profliu
+    {% endblock %}
+
+
+{% block body %}
+{{ include('user_settings/_settings_profile_tabs.html.twig') }}
+
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}   
+{{ form_label(form.profileImg) }}
+{{ form_widget(form.profileImg) }}
+{{ form_errors(form.profileImg) }}
+
+<div class="mt-8">
+<button type="submit" 
+class="block w-full shadow-sm border-transparent bg-indigo-600 hover:bg-indigo-700 dark: bg-indigo-500 dark:hover:bg-indigo-400 text-white rounded-md border p-2 mt-1 mb-1 ">Zmień zdjęcie!</button>
+</div> 
+{{ form_end(form) }}
+   
+{% endblock %}
