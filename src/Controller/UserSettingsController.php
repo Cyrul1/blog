@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\UserProfile;
 use App\Form\ProfileImgType;
 use App\Form\UserProfileType;
@@ -9,10 +10,10 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UserSettingsController extends AbstractController
 {
@@ -71,7 +72,7 @@ class UserSettingsController extends AbstractController
 
                 try{
                     $profileImgFile->move(
-                        $this->getParameter('profile_directory'),
+                        $this->getParameter('profiles_directory'),
                         $newFileName
                     );
 
@@ -80,6 +81,7 @@ class UserSettingsController extends AbstractController
 
                 $profile = $user->getUserProfile() ?? new UserProfile();
                 $profile->setImage($newFileName);
+                $user->setUserProfile($profile);
                 $users->save($user, true);
                 $this->addFlash('success', 'Twoje zdjęcie zostało zmienione.');
 
